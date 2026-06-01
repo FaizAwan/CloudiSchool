@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-H3MS6X8GNJ"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-H3MS6X8GNJ');
+</script>
+
+    
+
+    <title>Test Exam Routes</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <h2>Test Exam Routes</h2>
+    <button onclick="testViewExam()">Test View Exam (ID: 27)</button>
+    <button onclick="testExportExam()">Test Export Exam (ID: 27)</button>
+    <br><br>
+    <div id="result"></div>
+
+    <script>
+        function testViewExam() {
+            $.ajax({
+                url: '/commandarcityschool/exams/27',
+                method: 'GET',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Accept': 'application/json'
+                },
+                success: function(response) {
+                    $('#result').html('<pre>' + JSON.stringify(response, null, 2) + '</pre>');
+                },
+                error: function(xhr) {
+                    $('#result').html('Error: ' + xhr.status + ' - ' + xhr.responseText);
+                }
+            });
+        }
+
+        function testExportExam() {
+            window.open('/commandarcityschool/exams/27/export/csv', '_blank');
+        }
+    </script>
+</body>
+</html>
