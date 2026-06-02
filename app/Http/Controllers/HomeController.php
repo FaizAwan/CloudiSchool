@@ -414,6 +414,49 @@ class HomeController extends Controller
                 ?DB::table('schools')->count()
                 : 1; // tenant sees their own school only
 
+            // Teacher Attendance Stats
+            $teacherAttendanceTodayRate = null;
+            $teacherAttendanceActiveToday = 0;
+            $teacherAttendanceAbsentToday = 0;
+            $teacherAttendanceLeaveToday = 0;
+            $teacherAttendanceMonthlyRate = 100;
+
+            if (Schema::hasTable('teacher_attendances')) {
+                $today = date('Y-m-d');
+                $todayLogs = DB::table('teacher_attendances')
+                    ->when($tenantId, fn($q) => $q->where('tenant_id', $tenantId))
+                    ->where('date', $today)
+                    ->get();
+
+                if ($todayLogs->count() > 0) {
+                    $todayPresent = $todayLogs->filter(fn($l) => in_array(strtolower($l->status), ['present', 'p', 'active', 'present today']))->count();
+                    $todayAbsent = $todayLogs->filter(fn($l) => in_array(strtolower($l->status), ['absent', 'a']))->count();
+                    $todayLeave = $todayLogs->filter(fn($l) => in_array(strtolower($l->status), ['leave', 'l', 'leave approved']))->count();
+                    $todayTotal = $todayLogs->count();
+
+                    $teacherAttendanceActiveToday = $todayPresent;
+                    $teacherAttendanceAbsentToday = $todayAbsent;
+                    $teacherAttendanceLeaveToday = $todayLeave;
+                    $teacherAttendanceTodayRate = $todayTotal > 0 ? round(($todayPresent / $todayTotal) * 100) : null;
+                }
+
+                // Monthly attendance rate
+                $thisMonthStart = date('Y-m-01');
+                $thisMonthEnd = date('Y-m-t');
+
+                $monthlyPresent = DB::table('teacher_attendances')
+                    ->when($tenantId, fn($q) => $q->where('tenant_id', $tenantId))
+                    ->whereBetween('date', [$thisMonthStart, $thisMonthEnd])
+                    ->whereIn(DB::raw('LOWER(status)'), ['present', 'p', 'active', 'present today'])
+                    ->count();
+                $monthlyTotal = DB::table('teacher_attendances')
+                    ->when($tenantId, fn($q) => $q->where('tenant_id', $tenantId))
+                    ->whereBetween('date', [$thisMonthStart, $thisMonthEnd])
+                    ->count();
+
+                $teacherAttendanceMonthlyRate = $monthlyTotal > 0 ? round(($monthlyPresent / $monthlyTotal) * 100) : 100;
+            }
+
             return [
                 'totalClasses' => $totalClasses,
                 'totalTeachers' => $totalTeachers,
@@ -423,6 +466,11 @@ class HomeController extends Controller
                 'studentsInClasses' => $studentsInClasses,
                 'totalSchools' => $totalSchools,
                 'schoolsActive' => $totalSchools,
+                'teacherAttendanceTodayRate' => $teacherAttendanceTodayRate,
+                'teacherAttendanceActiveToday' => $teacherAttendanceActiveToday,
+                'teacherAttendanceAbsentToday' => $teacherAttendanceAbsentToday,
+                'teacherAttendanceLeaveToday' => $teacherAttendanceLeaveToday,
+                'teacherAttendanceMonthlyRate' => $teacherAttendanceMonthlyRate,
             ];
         }
         catch (\Exception $e) {

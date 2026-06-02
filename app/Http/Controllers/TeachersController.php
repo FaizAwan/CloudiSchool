@@ -182,10 +182,62 @@ class TeachersController extends Controller
         if (!$teacher) {
             return redirect()->route('teachers')->with('errorMessage', 'Teacher not found');
         }
-        // Placeholder datasets (extend later as needed)
-        $timetable = [];
-        $attendance = [];
-        $exams = [];
+
+        // Fetch dynamic timetable data
+        $timetable = DB::table('timetables')
+            ->leftJoin('periods', 'timetables.period_id', '=', 'periods.id')
+            ->leftJoin('classes', 'timetables.class', '=', 'classes.id')
+            ->select(
+                'timetables.*',
+                'periods.periodName',
+                'periods.start_time as startTime',
+                'periods.end_time as endTime',
+                'classes.className'
+            )
+            ->where('timetables.teacher_id', $id)
+            ->where(function ($q) use ($tenantId, $schoolId) {
+                if ($tenantId) {
+                    $q->where('timetables.tenant_id', $tenantId);
+                } elseif ($schoolId) {
+                    $q->where('timetables.school_id', $schoolId);
+                }
+            })
+            ->orderBy('periods.start_time', 'asc')
+            ->get();
+
+        // Fetch dynamic attendance history
+        $attendance = DB::table('teacher_attendances')
+            ->where('teacher_id', $id)
+            ->where(function ($q) use ($tenantId, $schoolId) {
+                if ($tenantId) {
+                    $q->where('tenant_id', $tenantId);
+                } elseif ($schoolId) {
+                    $q->where('school_id', $schoolId);
+                }
+            })
+            ->orderBy('date', 'desc')
+            ->get();
+
+        // Fetch dynamic exams created/invigilated by teacher
+        $exams = DB::table('exams')
+            ->leftJoin('subjects', 'exams.subject_id', '=', 'subjects.id')
+            ->leftJoin('classes', 'exams.class_id', '=', 'classes.id')
+            ->select(
+                'exams.*',
+                'subjects.subject_name',
+                'classes.className'
+            )
+            ->where('exams.teacher_id', $id)
+            ->where(function ($q) use ($tenantId, $schoolId) {
+                if ($tenantId) {
+                    $q->where('exams.tenant_id', $tenantId);
+                } elseif ($schoolId) {
+                    $q->where('exams.school_id', $schoolId);
+                }
+            })
+            ->orderBy('exam_date', 'desc')
+            ->get();
+
         return view('teacher_view', compact('teacher', 'timetable', 'attendance', 'exams'));
     }
 

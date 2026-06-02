@@ -85,7 +85,6 @@ Route::middleware(['auth'])->group(function () {
 Route::middleware(['auth', 'role:superadmin'])->group(function () {
 
     // Schools Management (superadmin write operations only)
-    Route::post('/addSchool', [App\Http\Controllers\HomeController::class , 'addSchool'])->middleware('role:superadmin')->name('addSchool');
 
 
     // Students Management (moved to auth-only below)
@@ -165,7 +164,11 @@ Route::middleware(['auth', 'role:superadmin'])->group(function () {
     Route::delete('/principal-remarks/admin/{id}', [App\Http\Controllers\PrincipalRemarksController::class , 'destroy'])->name('principal-remarks.destroy');
     Route::post('/principal-remarks/admin/{id}/toggle-status', [App\Http\Controllers\PrincipalRemarksController::class , 'toggleStatus'])->name('principal-remarks.toggle-status');
 
-    // Profile Management Routes (Superadmin can manage all profiles)
+});
+
+// Schools listing accessible to authenticated tenant admins (scoped in controller)
+Route::middleware(['auth'])->group(function () {
+    // Profile Management Routes (Accessible by all authenticated users)
     Route::get('/profile', [App\Http\Controllers\ProfileController::class , 'index'])->name('profile.index');
     Route::get('/profile/edit', [App\Http\Controllers\ProfileController::class , 'edit'])->name('profile.edit');
     Route::put('/profile/update', [App\Http\Controllers\ProfileController::class , 'update'])->name('profile.update');
@@ -174,10 +177,6 @@ Route::middleware(['auth', 'role:superadmin'])->group(function () {
     Route::post('/profile/change-password', [App\Http\Controllers\ProfileController::class , 'changePassword'])->name('profile.update-password');
     Route::get('/profile/settings', [App\Http\Controllers\ProfileController::class , 'settings'])->name('profile.settings');
     Route::post('/profile/settings', [App\Http\Controllers\ProfileController::class , 'updateSettings'])->name('profile.update-settings');
-});
-
-// Schools listing accessible to authenticated tenant admins (scoped in controller)
-Route::middleware(['auth'])->group(function () {
     // Question Bank Routes
     Route::get('/question-bank', [App\Http\Controllers\QuestionBankController::class , 'index'])->name('question-bank.index');
     Route::get('/question-bank/create', [App\Http\Controllers\QuestionBankController::class , 'create'])->name('question-bank.create');
@@ -211,6 +210,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/student-exams/{exam}/submit', [App\Http\Controllers\StudentExamController::class , 'submit'])->name('student-exams.submit');
 
     Route::get('/schools', [App\Http\Controllers\HomeController::class , 'schools'])->name('schools');
+    Route::post('/addSchool', [App\Http\Controllers\HomeController::class , 'addSchool'])->name('addSchool');
     Route::post('/save-branch-details', [App\Http\Controllers\HomeController::class , 'updateSchool'])->name('updateSchool');
     Route::get('/fetch-branch-details/{id}', [App\Http\Controllers\HomeController::class , 'getSchool'])->name('schools.show.json');
     Route::get('/getSchools', [App\Http\Controllers\HomeController::class , 'getSchools'])->name('getSchools');

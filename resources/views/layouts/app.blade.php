@@ -51,7 +51,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" media="print" onload="this.media='all'">
 
   <!-- Google Fonts - non-blocking with display=swap -->
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+  <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@600;700&family=Poppins:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
 
   <!-- Google Analytics - deferred to not block rendering -->
   <script>
@@ -692,9 +692,91 @@
         white-space: normal !important;
         line-height: 1.3 !important;
       }
+
+      /* Premium prominent CMS Sidebar Button */
+      .prominent-cms-link {
+        background: linear-gradient(135deg, rgba(0, 74, 198, 0.06) 0%, rgba(0, 74, 198, 0.12) 100%) !important;
+        border: 1.5px solid rgba(0, 74, 198, 0.15) !important;
+        border-left: 4px solid #004ac6 !important;
+        border-radius: 8px !important;
+        padding: 12px 15px !important;
+        box-shadow: 0 4px 12px rgba(0, 74, 198, 0.04) !important;
+        transition: all 0.3s ease !important;
+        display: flex !important;
+        align-items: center !important;
+        text-decoration: none !important;
+      }
+      .prominent-cms-link:hover {
+        background: linear-gradient(135deg, rgba(0, 74, 198, 0.12) 0%, rgba(0, 74, 198, 0.22) 100%) !important;
+        border-color: rgba(0, 74, 198, 0.3) !important;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(0, 74, 198, 0.16) !important;
+      }
+      .prominent-cms-link:hover i {
+        transform: rotate(12deg) scale(1.1);
+        color: #004ac6 !important;
+      }
+      .prominent-cms-link:hover span {
+        color: #004ac6 !important;
+      }
+      .prominent-cms-submenu {
+        background: rgba(0, 74, 198, 0.02) !important;
+        border: 1px solid rgba(0, 74, 198, 0.05) !important;
+        border-top: none !important;
+        border-radius: 0 0 8px 8px !important;
+        margin-top: -2px !important;
+        padding: 10px 15px !important;
+        list-style: none !important;
+      }
+      .prominent-cms-submenu-item {
+        display: flex !important;
+        align-items: center !important;
+        padding: 8px 12px !important;
+        color: #475569 !important;
+        font-size: 0.85rem !important;
+        font-weight: 600 !important;
+        border-radius: 6px !important;
+        transition: all 0.2s ease !important;
+        text-decoration: none !important;
+      }
+      .prominent-cms-submenu-item i {
+        font-size: 6px !important;
+        margin-right: 10px !important;
+        color: #004ac6 !important;
+        transition: all 0.2s ease !important;
+      }
+      .prominent-cms-submenu-item:hover {
+        background: rgba(0, 74, 198, 0.08) !important;
+        color: #004ac6 !important;
+        padding-left: 16px !important;
+      }
+      .prominent-cms-submenu-item:hover i {
+        color: #004ac6 !important;
+        transform: scale(1.3) !important;
+      }
+      .prominent-cms-view-btn {
+        display: flex !important;
+        align-items: center !important;
+        padding: 8px 12px !important;
+        color: #157347 !important;
+        background: rgba(21, 115, 71, 0.05) !important;
+        font-size: 0.85rem !important;
+        font-weight: 700 !important;
+        border-radius: 6px !important;
+        transition: all 0.2s ease !important;
+        text-decoration: none !important;
+      }
+      .prominent-cms-view-btn:hover {
+        background: rgba(21, 115, 71, 0.12) !important;
+        color: #157347 !important;
+        transform: scale(1.02);
+        box-shadow: 0 4px 10px rgba(21, 115, 71, 0.15) !important;
+      }
   </style>
 
 
+  <!-- Stitch Modern Premium Overrides -->
+  <link href="{{ asset('css/stitch_modern.css') }}" rel="stylesheet">
 </head>
 
 <body class="sb-nav-fixed">
@@ -958,61 +1040,13 @@
       <ul class="sidebar-nav" id="sidebar-nav">
 
         <li class="nav-item">
-          <a class="nav-link" href="#" onclick="return false;">
+          <a class="nav-link" href="{{ route('home') }}">
             <i class="bi bi-grid"></i>
             <span>Dashboard</span>
           </a>
         </li><!-- End Dashboard Nav -->
 
-        <li class="nav-heading">CMS Management</li>
-        <li class="nav-item">
-          <a class="nav-link collapsed" data-bs-target="#cms-nav" data-bs-toggle="collapse" href="#">
-            <i class="bi bi-layout-text-window-reverse"></i><span>Website CMS</span><i class="bi bi-chevron-down ms-auto"></i>
-          </a>
-          <ul id="cms-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-            <li>
-              <a href="{{ route('cms.news.index') }}">
-                <i class="bi bi-circle"></i><span>News Updates</span>
-              </a>
-            </li>
-            <li>
-              <a href="{{ route('cms.events.index') }}">
-                <i class="bi bi-circle"></i><span>School Events</span>
-              </a>
-            </li>
-            <li>
-              <a href="{{ route('cms.gallery.index') }}">
-                <i class="bi bi-circle"></i><span>Photo Gallery</span>
-              </a>
-            </li>
-            <li>
-              <a href="{{ route('cms.announcements.index') }}">
-                <i class="bi bi-circle"></i><span>Announcements</span>
-              </a>
-            </li>
-            <li>
-              <a href="{{ route('cms.blogs.index') }}">
-                <i class="bi bi-circle"></i><span>School Blogs</span>
-              </a>
-            </li>
-            <li>
-              <a href="{{ route('cms.templates.index') }}">
-                <i class="bi bi-circle"></i><span>Choose Template</span>
-              </a>
-            </li>
-            <li>
-              @php
-              $school = \Cache::remember('school_data_'.Auth::id(), 600, function() {
-                  return \DB::table('schools')->where('id', Auth::user()->tenant_id)->first();
-              });
-              $landingUrl = ($school && !empty($school->slug)) ? route('school.landing', $school->slug) : ($school ? route('school.landing', $school->tenant_id) : '#');
-              @endphp
-              <a href="{{ $landingUrl }}" target="_blank">
-                <i class="bi bi-eye text-success"></i><span>View Website</span>
-              </a>
-            </li>
-          </ul>
-        </li>
+
 
         @if(Auth::user()->role === 'superadmin')
         <li class="nav-item">
@@ -1415,6 +1449,60 @@
         {{-- Admin access to timetable removed - only superadmin can access --}}
 
         {{-- Admin access to reports and accounts removed - only superadmin can access --}}
+
+        <!-- Website CMS - High Prominence Premium Section -->
+        <li class="nav-heading" style="margin-top: 25px; padding-top: 15px; border-top: 1px solid rgba(0, 74, 198, 0.08); font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #899bbd; font-weight: 700;">Live Website</li>
+        <li class="nav-item" style="margin: 8px 15px 15px 15px;">
+          <a class="nav-link collapsed prominent-cms-link" data-bs-target="#cms-nav" data-bs-toggle="collapse" href="#">
+            <i class="bi bi-globe" style="font-size: 1.25rem; color: #004ac6; margin-right: 10px; filter: drop-shadow(0 2px 4px rgba(0, 74, 198, 0.2)); transition: all 0.3s ease;"></i>
+            <span style="font-weight: 700; color: #004ac6; font-size: 0.92rem; letter-spacing: 0.2px;">Website CMS</span>
+            <span class="badge ms-2" style="background-color: #fea619; color: #fff; font-size: 0.65rem; font-weight: 800; padding: 3px 6px; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.5px; box-shadow: 0 2px 4px rgba(254, 166, 25, 0.3);">Live</span>
+            <i class="bi bi-chevron-down ms-auto" style="font-size: 0.9rem; color: #004ac6; transition: transform 0.3s ease;"></i>
+          </a>
+          <ul id="cms-nav" class="nav-content collapse prominent-cms-submenu" data-bs-parent="#sidebar-nav">
+            <li style="margin-bottom: 8px;">
+              <a href="{{ route('cms.news.index') }}" class="prominent-cms-submenu-item">
+                <i class="bi bi-circle"></i><span>News Updates</span>
+              </a>
+            </li>
+            <li style="margin-bottom: 8px;">
+              <a href="{{ route('cms.events.index') }}" class="prominent-cms-submenu-item">
+                <i class="bi bi-circle"></i><span>School Events</span>
+              </a>
+            </li>
+            <li style="margin-bottom: 8px;">
+              <a href="{{ route('cms.gallery.index') }}" class="prominent-cms-submenu-item">
+                <i class="bi bi-circle"></i><span>Photo Gallery</span>
+              </a>
+            </li>
+            <li style="margin-bottom: 8px;">
+              <a href="{{ route('cms.announcements.index') }}" class="prominent-cms-submenu-item">
+                <i class="bi bi-circle"></i><span>Announcements</span>
+              </a>
+            </li>
+            <li style="margin-bottom: 8px;">
+              <a href="{{ route('cms.blogs.index') }}" class="prominent-cms-submenu-item">
+                <i class="bi bi-circle"></i><span>School Blogs</span>
+              </a>
+            </li>
+            <li style="margin-bottom: 8px;">
+              <a href="{{ route('cms.templates.index') }}" class="prominent-cms-submenu-item">
+                <i class="bi bi-circle"></i><span>Choose Template</span>
+              </a>
+            </li>
+            <li style="margin-top: 5px; border-top: 1px dashed rgba(0, 74, 198, 0.1); padding-top: 8px;">
+              @php
+              $school = \Cache::remember('school_data_'.Auth::id(), 600, function() {
+                  return \DB::table('schools')->where('id', Auth::user()->tenant_id)->first();
+              });
+              $landingUrl = ($school && !empty($school->slug)) ? route('school.landing', $school->slug) : ($school ? route('school.landing', $school->tenant_id) : '#');
+              @endphp
+              <a href="{{ $landingUrl }}" target="_blank" class="prominent-cms-view-btn">
+                <i class="bi bi-eye-fill" style="margin-right: 8px; font-size: 0.95rem;"></i><span>View Website</span>
+              </a>
+            </li>
+          </ul>
+        </li>
 
       </ul>
 

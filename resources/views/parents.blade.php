@@ -10,7 +10,7 @@
         <div class="col-12">
             <div class="page-title-box d-flex flex-column flex-md-row justify-content-between align-items-md-center">
                 <div>
-                    <h1 class="mb-0" style="font-family: 'Outfit', sans-serif; font-size: 1.75rem; font-weight: 800; color: var(--accent-10); text-transform: uppercase; letter-spacing: 12px;">
+                    <h1 class="mb-0" style="font-family: 'Outfit', sans-serif; font-size: 1.75rem; font-weight: 800; color: var(--accent-10); text-transform: uppercase; letter-spacing: 4px; white-space: nowrap;">
                         <i class="bi bi-people-fill me-3"></i>P A R E N T S &nbsp; &nbsp; M A N A G E M E N T
                     </h1>
                     <p class="text-muted mb-0">Orchestrate parent-institution relationships with sophisticated digital tracking.</p>

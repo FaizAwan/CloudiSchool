@@ -119,61 +119,28 @@
 <div class="container my-4">
     <div class="row justify-content-center">
         <div class="col-md-12">
-            <div style="margin-top:20px;" class="row">
-                @php
-                    $canAddSchool = in_array(Auth::user()->role, ['superadmin', 'admin']);
-                @endphp
-                @if($canAddSchool)
-                        <div class="col-md-3">
-                            <div class="card">
-                                <div class="card-header">
-                                    <h6 class="mb-0">Add New School Branch</h6>
-                                </div>
-                                <div class="card-body">
-                                    <form action="{{ request()->getBaseUrl() }}/addSchool" method="POST">
-                                        @csrf
-                                        <label>Branch Name</label>
-                                        <input class="form-control" required name="schoolName" type="text"/><br/>
-                                        <label>Branch City</label>
-                                        <input class="form-control" required name="schoolCity" type="text"/><br/>
-                                        <label>Branch Admin Name</label>
-                                        <input class="form-control" required name="schoolAdminName" type="text"/><br/>
-                                        <label>Branch Admin Email</label>
-                                        <input class="form-control" required name="schoolAdminEmail" type="text"/><br/>
-                                        <label>Branch Admin Password</label>
-                                        <input class="form-control" required name="schoolAdminPassword" type="password"/>
-                                        <hr/>
-                                        <div class="row">
-                                            <div class="col-md-12"><label>Bank Name</label>
-                                                <input class="form-control" name="bank_name" type="text"/>
-                                            </div>
-                                            <div class="col-md-12"><label>Bank Branch</label>
-                                                <input class="form-control" name="bank_branch" type="text"/>
-                                            </div>
-                                            <div class="col-md-12"><label>Account Title</label>
-                                                <input class="form-control" name="bank_account_title" type="text"/>
-                                            </div>
-                                            <div class="col-md-12"><label>Account Number</label>
-                                                <input class="form-control" name="bank_account_number" type="text"/>
-                                            </div>
-                                            <div class="col-md-12"><label>IBAN (optional)</label>
-                                                <input class="form-control" name="bank_iban" type="text"/>
-                                            </div>
-                                        </div>
-                                        <hr/>
-                                        <input class="form-control btn btn-primary" name="submit" value="Add School Branch" type="submit"/>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                        @endif
+            @php
+                $canAddSchool = in_array(Auth::user()->role, ['superadmin', 'admin']);
+            @endphp
 
-                        <div class="{{ $canAddSchool ? 'col-md-9' : 'col-md-12' }}">
-                            <div class="card">
-                                <div class="card-header">
-                                    <h6 class="mb-0">School Branches' List</h6>
-                                </div>
-                                <div class="card-body">
+            @if($canAddSchool)
+            <!-- Button to open add branch modal -->
+            <div class="row mb-3">
+                <div class="col-md-12 text-end">
+                    <button type="button" class="btn btn-primary btn-mid shadow-sm" data-bs-toggle="modal" data-bs-target="#addBranchModal" style="background-color:#1488CC !important; border-color:#2B32B2 !important; color:#ffffff !important; font-weight:600; border-radius:6px; padding: 8px 18px; font-size: 13px;">
+                        <i class="bi bi-plus-lg me-1"></i> Add New School Branch
+                    </button>
+                </div>
+            </div>
+            @endif
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h6 class="mb-0">School Branches' List</h6>
+                        </div>
+                        <div class="card-body">
                                     @if (session('message'))
                                       <div id="alert-message" class="alert alert-primary">
                                           {{ session('message') }}
@@ -232,6 +199,98 @@
                 </div>
             </div>
         </div>
+
+<!-- Add Branch Modal -->
+<div class="modal fade" id="addBranchModal" tabindex="-1" role="dialog" aria-labelledby="addBranchModalLabel" aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content" style="border: none; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.15);">
+      <div class="modal-header" style="background: linear-gradient(135deg, #1488CC, #2B32B2); color: #fff; padding: 15px 20px;">
+        <h6 class="modal-title mb-0" id="addBranchModalLabel" style="font-weight: 700; letter-spacing: 0.5px;">
+          <i class="bi bi-bank me-2"></i>Add New School Branch
+        </h6>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="filter: invert(1); opacity: .8;"></button>
+      </div>
+      <form action="{{ request()->getBaseUrl() }}/addSchool" method="POST">
+        @csrf
+        <div class="modal-body" style="padding: 25px; background-color: #f8f9fa;">
+          
+          <!-- Section 1: Branch Details -->
+          <div class="mb-4">
+            <h6 style="color: #2B32B2; font-weight: 700; border-bottom: 2px solid #e9ecef; padding-bottom: 6px; margin-bottom: 15px; font-size: 14px;">
+              <i class="bi bi-info-circle me-2"></i>Branch & Admin Information
+            </h6>
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label class="form-label" style="font-weight: 600; color: #495057; font-size: 11px;">Branch Name <span class="text-danger">*</span></label>
+                <input class="form-control shadow-sm" required name="schoolName" type="text" placeholder="e.g. Aptech Main Branch" style="border-radius: 6px;"/>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="form-label" style="font-weight: 600; color: #495057; font-size: 11px;">Branch City <span class="text-danger">*</span></label>
+                <input class="form-control shadow-sm" required name="schoolCity" type="text" placeholder="e.g. Hyderabad" style="border-radius: 6px;"/>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label class="form-label" style="font-weight: 600; color: #495057; font-size: 11px;">Branch Admin Name <span class="text-danger">*</span></label>
+                <input class="form-control shadow-sm" required name="schoolAdminName" type="text" placeholder="e.g. John Doe" style="border-radius: 6px;"/>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="form-label" style="font-weight: 600; color: #495057; font-size: 11px;">Branch Admin Email <span class="text-danger">*</span></label>
+                <input class="form-control shadow-sm" required name="schoolAdminEmail" type="email" placeholder="e.g. admin@branch.com" style="border-radius: 6px;"/>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12 mb-3">
+                <label class="form-label" style="font-weight: 600; color: #495057; font-size: 11px;">Branch Admin Password <span class="text-danger">*</span></label>
+                <input class="form-control shadow-sm" required name="schoolAdminPassword" type="password" placeholder="Min. 6 characters" style="border-radius: 6px;"/>
+              </div>
+            </div>
+          </div>
+
+          <!-- Section 2: Bank Details -->
+          <div>
+            <h6 style="color: #2B32B2; font-weight: 700; border-bottom: 2px solid #e9ecef; padding-bottom: 6px; margin-bottom: 15px; font-size: 14px;">
+              <i class="bi bi-credit-card me-2"></i>Bank Account Information (Optional)
+            </h6>
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label class="form-label" style="font-weight: 600; color: #495057; font-size: 11px;">Bank Name</label>
+                <input class="form-control shadow-sm" name="bank_name" type="text" placeholder="e.g. HBL Bank" style="border-radius: 6px;"/>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="form-label" style="font-weight: 600; color: #495057; font-size: 11px;">Bank Branch</label>
+                <input class="form-control shadow-sm" name="bank_branch" type="text" placeholder="e.g. Saddar Branch" style="border-radius: 6px;"/>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label class="form-label" style="font-weight: 600; color: #495057; font-size: 11px;">Account Title</label>
+                <input class="form-control shadow-sm" name="bank_account_title" type="text" placeholder="e.g. Aptech School System" style="border-radius: 6px;"/>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="form-label" style="font-weight: 600; color: #495057; font-size: 11px;">Account Number</label>
+                <input class="form-control shadow-sm" name="bank_account_number" type="text" placeholder="e.g. 123456789012" style="border-radius: 6px;"/>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12 mb-3">
+                <label class="form-label" style="font-weight: 600; color: #495057; font-size: 11px;">IBAN (optional)</label>
+                <input class="form-control shadow-sm" name="bank_iban" type="text" placeholder="e.g. PK00HABB0012345678901234" style="border-radius: 6px;"/>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <div class="modal-footer" style="background-color: #f1f3f5; border-top: 1px solid #dee2e6; padding: 15px 20px;">
+          <button type="button" class="btn btn-secondary btn-mid" data-bs-dismiss="modal" style="border-radius: 6px;">Close</button>
+          <button type="submit" class="btn btn-primary btn-mid" style="border-radius: 6px; background-color: #1488CC; border-color: #1488CC;">
+            <i class="bi bi-save me-1"></i> Add School Branch
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
 
 <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true" data-backdrop="static">
   <div class="modal-dialog" role="document">
